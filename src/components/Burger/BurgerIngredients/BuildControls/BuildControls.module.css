@@ -1,0 +1,30 @@
+.BuildControls {
+  align-items: center;
+}
+
+.OrderButton {
+  margin: 20px;
+  padding: 10px;
+  align-items: center;
+  cursor: pointer;
+
+  font-family: inherit;
+  font-size: 1.2em;
+  padding: 15px 30px;
+}
+
+.OrderButton:not(:disabled) {
+  animation: enable 0.3s linear;
+}
+
+@keyframes enable {
+  0% {
+    transform: scale(1);
+  }
+  60% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
