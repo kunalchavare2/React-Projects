@@ -2,7 +2,7 @@ import React from 'react';
 
 import classes from './BuildControls.module.css';
 import BuildControl from './BuildControl/BuildControl';
-import { makeStyles } from '@material-ui/core/styles';
+
 
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
@@ -17,36 +17,40 @@ const controls = [
 
 
 const buildControls = (props) => (
-  <div className={classes.BuildControls}>
-    {/* <p>Current Price: <strong>{props.price.toFixed(2)}</strong></p> */}
-    <p>Current Price: <strong>100</strong></p>
-    {controls.map(ctrl => (
-      <Grid container spacing={2} justify="center"
-        alignItems="center">
-        <Grid container item xs={12} spacing={3}
-          justify="center" alignItems="center">
-
-          <BuildControl
-            key={ctrl.label}
-            label={ctrl.label}
-          // added={() => props.ingredientAdded(ctrl.type)}
-          // removed={() => props.ingredientRemoved(ctrl.type)}
-          // disabled={props.disabled[ctrl.type]} 
-
-          />
-
-        </Grid>
+  <Grid container xs={12} justify="center" alignItems="center">
+    <Grid container justify="center" alignItems="center"
+      xs={12} sm={10} md={6}>
+      <Grid item xs={8} justify="center" alignItems="center">
+        Current Price: <strong>₹ {props.totalPrice.toFixed(2)}</strong>
       </Grid>
-    ))}
-    <Grid className={classes.OrderButton} container spacing={2} justify="center"
-      alignItems="center">
-      <Button
-        
-        variant="contained" color="primary"
-        disabled={!props.purchasable}>ORDER NOW</Button>
-    </Grid>
-  </div >
 
+
+      <Grid container item xs={10}
+        sm={8}
+        justify="center" alignItems="center">{
+          controls.map(ctrl => (
+            <BuildControl
+              key={ctrl.label}
+              label={ctrl.label}
+              type={ctrl.type}
+              added={() => props.ingredientsAdd(ctrl.type)}
+              removed={() => props.ingredientsRemove(ctrl.type)}
+              ingredients={props.ingredients}
+            //disabled={props.disabled[ctrl.type]} 
+
+            />
+          ))
+        }
+      </Grid>
+
+      <Grid item xs={8} sm={6} className={classes.OrderButton}
+        spacing={2} justify="center" alignItems="center">
+        <Button
+          variant="contained" color="primary"
+          disabled={!props.purchasable}>ORDER NOW</Button>
+      </Grid>
+    </Grid >
+  </Grid>
 );
 
 export default buildControls;

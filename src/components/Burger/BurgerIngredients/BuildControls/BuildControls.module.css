@@ -1,5 +1,10 @@
 .BuildControls {
   align-items: center;
+  border: 1px green solid;
+}
+
+.GridStyle {
+  border: 1px red solid;
 }
 
 .OrderButton {
