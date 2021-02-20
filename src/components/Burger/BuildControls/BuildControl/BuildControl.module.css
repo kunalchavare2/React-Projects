@@ -1,0 +1,14 @@
+.BuildControl {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  margin: 5px 0;
+}
+
+.RedColor {
+  background-color: #f50057;
+}
+
+.GreenColor {
+  background-color: #43a047;
+}

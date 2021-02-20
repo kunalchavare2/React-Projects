@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import BuildControls from '../../components/Burger/BurgerIngredients/BuildControls/BuildControls';
+import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Burger from '../../components/Burger/BurgerIngredients/Burger';
 import Aux from '../../hoc/Aux';
+import Modal from '../../components/UI/Modal/Modal'
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummmary';
 
-const INDREDIENT_PRICELIST = {
+const INGREDIENT_PRICELIST = {
     salad: 5,
     bacon: 15,
     cheese: 10,
@@ -19,6 +21,8 @@ class BurgerBuilder extends Component {
             meat: 0
         },
         totalPrice: 20,
+        purchasable: false,
+        purchasing: false,
 
     }
 
@@ -30,13 +34,17 @@ class BurgerBuilder extends Component {
         };
         updatedIngredients[type] = updatedCount;
 
-        const priceAddition = INDREDIENT_PRICELIST[type];
+        const priceAddition = INGREDIENT_PRICELIST[type];
         const oldPrice = this.state.totalPrice;
         const newPrice = oldPrice + priceAddition;
+
 
         this.setState({
             totalPrice: newPrice, ingredients: updatedIngredients
         })
+
+        //to check if order is greater then certain amount
+        this.purchasableHandler(newPrice, updatedIngredients);
     }
 
     removeIngredientHandler = (type) => {
@@ -48,28 +56,79 @@ class BurgerBuilder extends Component {
             };
             updatedIngredients[type] = updatedCount;
 
-            const priceAddition = INDREDIENT_PRICELIST[type];
+            const priceDeduction = INGREDIENT_PRICELIST[type];
             const oldPrice = this.state.totalPrice;
-            const newPrice = oldPrice - priceAddition;
+            const newPrice = oldPrice - priceDeduction;
+
 
             this.setState({
                 totalPrice: newPrice, ingredients: updatedIngredients
             })
+
+
+            //to check if order is greater then certain amount
+            this.purchasableHandler(newPrice, updatedIngredients);
         }
 
     }
+
+    purchasableHandler = (totalPrice, ingredients) => {
+
+        let isPurchasable = this.state.purchasable;
+
+        // isPurchasable = totalPrice > 25 ? true : false;
+
+        if (ingredients['meat'] > 0 || ingredients['bacon'] > 0) {
+            isPurchasable = true;
+        } else {
+            isPurchasable = false;
+        }
+
+        this.setState({
+            purchasable: isPurchasable,
+        })
+    }
+
+    purchaseHandler = () => {
+        this.setState({ purchasing: true });
+    }
+
+    cancelOrderHandler = () => {
+        this.setState({ purchasing: false });
+    }
+
     render() {
-        return (<Aux>
-            <div>
-                < Burger ingredients={this.state.ingredients} />
-                <BuildControls
-                    ingredientsAdd={this.addIngredientHandler}
-                    ingredientsRemove={this.removeIngredientHandler}
-                    totalPrice={this.state.totalPrice}
-                    ingredients={this.state.ingredients}
-                    purchasable={true} />
-            </div>
-        </Aux>);
+        const disabledInfo = {
+            ...this.state.ingredients
+        }
+
+        // to check whether remove ingredient button should disable 
+        // when ingredient value is 0
+        for (let key in disabledInfo) {
+            disabledInfo[key] = disabledInfo[key] <= 0;
+        }
+        return (
+            <Aux>
+
+                <Modal show={this.state.purchasing}
+                    dismissModal={this.cancelOrderHandler}>
+                    <OrderSummary ingredients={this.state.ingredients}
+                        onCancel={this.cancelOrderHandler}
+                        totalPrice={this.state.totalPrice} />
+                </Modal>
+
+                <div>
+                    < Burger ingredients={this.state.ingredients} />
+                    <BuildControls
+                        ingredientsAdd={this.addIngredientHandler}
+                        ingredientsRemove={this.removeIngredientHandler}
+                        totalPrice={this.state.totalPrice}
+                        ingredients={this.state.ingredients}
+                        purchasable={this.state.purchasable}
+                        disabledInfo={disabledInfo}
+                        ordered={this.purchaseHandler} />
+                </div>
+            </Aux>);
     }
 }
 
