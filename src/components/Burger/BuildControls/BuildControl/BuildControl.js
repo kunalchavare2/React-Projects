@@ -24,7 +24,7 @@ const buildControl = (props) => {
             </Grid>
             <Grid item xs={3} sm={3}>
                 <Button size="small" variant="contained" color="primary"
-                    onClick={props.added}>
+                    disabled={false} onClick={props.added}>
                     +
             </Button>
             </Grid>

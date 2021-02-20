@@ -28,26 +28,31 @@ const buildControls = (props) => (
       <Grid container item xs={10}
         sm={8}
         justify="center" alignItems="center">{
-          controls.map(ctrl => (
-            <BuildControl
-              key={ctrl.label}
-              label={ctrl.label}
-              type={ctrl.type}
-              added={() => props.ingredientsAdd(ctrl.type)}
-              removed={() => props.ingredientsRemove(ctrl.type)}
-              ingredients={props.ingredients}
-            //disabled={props.disabled[ctrl.type]} 
+          controls.map(ctrl => {
+            return (
+              <BuildControl
+                key={ctrl.label}
+                label={ctrl.label}
+                type={ctrl.type}
+                added={() => props.ingredientsAdd(ctrl.type)}
+                removed={() => props.ingredientsRemove(ctrl.type)}
+                ingredients={props.ingredients}
+                removeDisabled={false}
+                addDisabled={false}
+                disabled={props.disabledInfo[ctrl.type]}
 
-            />
-          ))
+              />
+            );
+          })
         }
       </Grid>
 
-      <Grid item xs={8} sm={6} className={classes.OrderButton}
-        spacing={2} justify="center" alignItems="center">
+      <Grid item xm={12} sm={6} className={classes.OrderButton}
+        justify="center" alignItems="center">
         <Button
           variant="contained" color="primary"
-          disabled={!props.purchasable}>ORDER NOW</Button>
+          disabled={!props.purchasable}
+          onClick={props.ordered}>ORDER NOW</Button>
       </Grid>
     </Grid >
   </Grid>
